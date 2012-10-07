@@ -24,6 +24,12 @@ import org.apache.lucene.util.Version;
 public class Indexador {
     // Objetos de clase.
     private int cantidadDeDocumentosIndexados;
+    private StopWords stopWords;
+    
+    // Cosntructor predeterminado
+    public Indexador(){
+        stopWords = new StopWords();
+    }
     
     // Metodo que crea los indices.
     // Se le pasa un valor booleano.
@@ -35,7 +41,11 @@ public class Indexador {
         try{
             // Analizador en español. Ya contiene los StopWords en español.
             // El mismo analizador se tiene que usar en el indexado y en la busqueda.
-            SpanishAnalyzer analizador = new SpanishAnalyzer(Version.LUCENE_36);                
+            SpanishAnalyzer analizador = new SpanishAnalyzer(Version.LUCENE_36, stopWords.getS_stopWords());                
+            
+            //System.out.println("Los stopWords son: " + stopWords.getS_stopWords());
+            
+            //System.out.println("Los stopWords son: " + analizador.getDefaultStopSet());
             
             // Almacenar el indexado en un directorio.
             Directory directorioIndex = new SimpleFSDirectory(new File(Constantes.DIRECTORIO_INDEXAR));
