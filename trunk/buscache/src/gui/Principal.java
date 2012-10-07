@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 
 /*
@@ -39,14 +38,11 @@ public class Principal extends javax.swing.JFrame {
         }
         initComponents();
         
-        // Pantalla Completa.
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        
-        
         // No se puede editar donde se muestra el contenido (html).
         jEditorPaneContenido.setEditable(false);
         
+        // Pantalla Completa.
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -90,6 +86,11 @@ public class Principal extends javax.swing.JFrame {
             String[] strings = {};
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
+        });
+        jListaResultado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jListaResultadoMousePressed(evt);
+            }
         });
         jScrollPane1.setViewportView(jListaResultado);
 
@@ -198,8 +199,18 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         buscarContenido();
-        mostrarContenido("");
+        //mostrarContenido("");
     }//GEN-LAST:event_jButtonBuscarActionPerformed
+
+    private void jListaResultadoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListaResultadoMousePressed
+        JList list = (JList)evt.getSource();
+        
+        if (evt.getClickCount() == 2) {
+            int index = list.locationToIndex(evt.getPoint());
+            mostrarContenido((String)list.getSelectedValue());
+            System.out.println("El objeto es: " + list.getSelectedValue());
+        }
+    }//GEN-LAST:event_jListaResultadoMousePressed
 
     // Metodos varios
     public void buscarContenido(){
@@ -237,35 +248,14 @@ public class Principal extends javax.swing.JFrame {
     public void mostrarContenido(String rutaDocumento) {
         
         try{
-            //FileReader fr = new FileReader ("medicalcd/afaramacolo.asp-pl=A.htm");
-            File paginaHTML = new File("medicalcd/afaramacolo.asp-pl=A.htm");
-            //FileReader fr = new FileReader ("prueba/prueba.txt");
+            File paginaHTML = new File(rutaDocumento);
             String urlDocumento = "file://localhost/" + paginaHTML.getAbsolutePath();  
                 
-            //BufferedReader br = new BufferedReader(fr);                
-            String linea = "";
-            String contenido = "";
-            
+            jEditorPaneContenido.setContentType("text/html"); 
             jEditorPaneContenido.setPage(new URL(urlDocumento));
-            
-            
-            
-            
-            
-           // jEditorPaneContenido.setContentType("text/html"); 
-            
-            /*while((linea = br.readLine()) != null){ 
-                contenido = contenido + linea;
-            } 
-            System.out.println("El contenido es: " + contenido); 
-            
-            // Insertamos el contenido.
-            //jEditorPaneContenido.setText(contenido);*/
-            
         }catch(Exception e){
             e.printStackTrace();
         }
-       
     } // Fin del metodo publico mostrarContenido.
     
     /**
