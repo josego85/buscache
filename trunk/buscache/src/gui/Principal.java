@@ -189,10 +189,10 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButtonIndexarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIndexarActionPerformed
         String mensaje = "Creando indices...";
-        JOptionPane.showMessageDialog(this, mensaje,
+        /*JOptionPane.showMessageDialog(this, mensaje,
             "" + Constantes.INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO + 
             Constantes.TITULO_PROGRAMA, JOptionPane.PLAIN_MESSAGE);
-        
+        */
         // Se indexa los documentos.
         indexador = new Indexador();
         indexador.crearIndice(true);
