@@ -1,6 +1,16 @@
 package gui;
 
 import Auxiliar.Constantes;
+import buscador.Indexador;
+import buscador.Searcher;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -38,6 +48,13 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButtonIndexar = new javax.swing.JButton();
+        jTextFieldBuscador = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListaResultado = new javax.swing.JList();
+        jButtonBuscar = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jEditorPaneContenido = new javax.swing.JEditorPane();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -45,6 +62,35 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButtonIndexar.setText("Indexar");
+        jButtonIndexar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIndexarActionPerformed(evt);
+            }
+        });
+
+        jTextFieldBuscador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldBuscadorActionPerformed(evt);
+            }
+        });
+
+        jListaResultado.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = {};
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jListaResultado);
+
+        jButtonBuscar.setText("Buscar");
+        jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarActionPerformed(evt);
+            }
+        });
+
+        jScrollPane2.setViewportView(jEditorPaneContenido);
 
         jMenu1.setText("Salir");
 
@@ -78,11 +124,34 @@ public class Principal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 664, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonIndexar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonBuscar))
+                    .addComponent(jScrollPane2))
+                .addContainerGap(101, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jButtonIndexar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonBuscar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 81, Short.MAX_VALUE))
         );
 
         pack();
@@ -104,6 +173,76 @@ public class Principal extends javax.swing.JFrame {
                 Constantes.TITULO_PROGRAMA, JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jButtonIndexarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIndexarActionPerformed
+        // Se indexa los documentos.
+        indexador = new Indexador();
+        indexador.crearIndice(true);
+    }//GEN-LAST:event_jButtonIndexarActionPerformed
+
+    private void jTextFieldBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBuscadorActionPerformed
+       buscarContenido();
+    }//GEN-LAST:event_jTextFieldBuscadorActionPerformed
+
+    private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
+        buscarContenido();
+        mostrarContenido("");
+    }//GEN-LAST:event_jButtonBuscarActionPerformed
+
+    // Metodos varios
+    public void buscarContenido(){
+        // Se busca en el index.
+        seacher = new Searcher();
+        
+        // Variables
+        List<String> listaResultado = new ArrayList<String>();
+        DefaultListModel modelo = new DefaultListModel();
+        
+        System.out.println("El texto vale: " + jTextFieldBuscador.getText());
+        
+       if(!jTextFieldBuscador.getText().equals("") ){
+            listaResultado = seacher.searchIndex(jTextFieldBuscador.getText());
+        
+            Iterator iterador = listaResultado.iterator();
+
+            while(iterador.hasNext()){
+                String value = (String)iterador.next();
+                System.out.println("Value : " + value);
+                modelo.addElement(value);
+            }      
+            jListaResultado.setModel(modelo);
+       }else{
+            String codigoHTML = "No introdujo nada en la caja del buscador.\n"
+                    + "Por favor. Escriba algo.";
+            JOptionPane.showMessageDialog(this, codigoHTML,
+                "" + Constantes.INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO + 
+                Constantes.TITULO_PROGRAMA, JOptionPane.ERROR_MESSAGE);    
+       }
+    } // Fin del metodo publico buscarContenido.
+    
+    
+    //
+    public void mostrarContenido(String rutaDocumento) {
+        
+        try{
+            FileReader fr = new FileReader ("medicalcd/afaramacolo.asp-pl=A.htm");
+            BufferedReader br = new BufferedReader(fr);                
+            String linea = "";
+            String contenido = "";
+
+            jEditorPaneContenido.setContentType("text/html"); 
+            
+            while((linea = br.readLine()) != null){ 
+                contenido = contenido + linea;
+            } 
+            System.out.println("El contenido es: " + contenido); 
+            
+            // Insertamos el contenido.
+            jEditorPaneContenido.setText(contenido);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+       
+    } // Fin del metodo publico mostrarContenido.
     /**
      * Donde se ejecuta la Ventana Principal de la aplicacion.
      * @param args the command line arguments
@@ -141,10 +280,20 @@ public class Principal extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonBuscar;
+    private javax.swing.JButton jButtonIndexar;
+    private javax.swing.JEditorPane jEditorPaneContenido;
+    private javax.swing.JList jListaResultado;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextFieldBuscador;
     // End of variables declaration//GEN-END:variables
+    
+    private Indexador indexador;
+    private Searcher seacher;
 } // Fin de la clase Principal.
