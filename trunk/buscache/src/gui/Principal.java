@@ -3,15 +3,16 @@ package gui;
 import Auxiliar.Constantes;
 import buscador.Indexador;
 import buscador.Searcher;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.JLabel;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 
 /*
@@ -37,6 +38,15 @@ public class Principal extends javax.swing.JFrame {
             UIManager.getCrossPlatformLookAndFeelClassName();
         }
         initComponents();
+        
+        // Pantalla Completa.
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
+        
+        
+        // No se puede editar donde se muestra el contenido (html).
+        jEditorPaneContenido.setEditable(false);
+        
     }
 
     /**
@@ -130,28 +140,31 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonIndexar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTextFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonBuscar))
-                    .addComponent(jScrollPane2))
-                .addContainerGap(101, Short.MAX_VALUE))
+                        .addComponent(jButtonBuscar)
+                        .addGap(0, 111, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jButtonIndexar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextFieldBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonBuscar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 81, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 19, Short.MAX_VALUE)))
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -224,25 +237,37 @@ public class Principal extends javax.swing.JFrame {
     public void mostrarContenido(String rutaDocumento) {
         
         try{
-            FileReader fr = new FileReader ("medicalcd/afaramacolo.asp-pl=A.htm");
-            BufferedReader br = new BufferedReader(fr);                
+            //FileReader fr = new FileReader ("medicalcd/afaramacolo.asp-pl=A.htm");
+            File paginaHTML = new File("medicalcd/afaramacolo.asp-pl=A.htm");
+            //FileReader fr = new FileReader ("prueba/prueba.txt");
+            String urlDocumento = "file://localhost/" + paginaHTML.getAbsolutePath();  
+                
+            //BufferedReader br = new BufferedReader(fr);                
             String linea = "";
             String contenido = "";
-
-            jEditorPaneContenido.setContentType("text/html"); 
             
-            while((linea = br.readLine()) != null){ 
+            jEditorPaneContenido.setPage(new URL(urlDocumento));
+            
+            
+            
+            
+            
+           // jEditorPaneContenido.setContentType("text/html"); 
+            
+            /*while((linea = br.readLine()) != null){ 
                 contenido = contenido + linea;
             } 
             System.out.println("El contenido es: " + contenido); 
             
             // Insertamos el contenido.
-            jEditorPaneContenido.setText(contenido);
+            //jEditorPaneContenido.setText(contenido);*/
+            
         }catch(Exception e){
             e.printStackTrace();
         }
        
     } // Fin del metodo publico mostrarContenido.
+    
     /**
      * Donde se ejecuta la Ventana Principal de la aplicacion.
      * @param args the command line arguments
