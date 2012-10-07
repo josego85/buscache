@@ -22,7 +22,7 @@ import org.apache.lucene.util.Version;
  */
 public class Indexador {
     // Objetos de clase.
-    public static final String directorioDatos = "prueba";          // Donde se encuentran los datos
+    public static final String directorioDatos = "medicalcd";          // Donde se encuentran los datos
     public static final String directorioIndexar = "index";          // Donde se encuentra lo que se indexó.
     
     // Metodo que crea los indices.
