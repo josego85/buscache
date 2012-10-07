@@ -4,6 +4,7 @@
  */
 package buscador;
 
+import Auxiliar.Constantes;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,6 @@ import org.apache.lucene.util.Version;
  * @author proyectosbeta
  */
 public class Searcher {
-    // Objetos de clase.
-    public static final String index = "index";
-    
     // Metodo para buscar.
     public List<String> searchIndex(String searchString) {
         // Variables
@@ -31,7 +29,7 @@ public class Searcher {
         System.out.println("Searching.... '" + searchString + "'");
         
         try {
-            IndexReader reader = IndexReader.open(FSDirectory.open(new File(index)), true);
+            IndexReader reader = IndexReader.open(FSDirectory.open(new File(Constantes.DIRECTORIO_INDEXAR)), true);
             IndexSearcher searcher = new IndexSearcher(reader);
 
             // Analizador en español. Ya contiene los StopWords en español.
