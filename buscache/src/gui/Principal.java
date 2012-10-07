@@ -177,20 +177,30 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         String codigoHTML = "<html><body><p><b>&nbsp;&nbsp;&nbsp;&nbsp;Autor:</b> " +
-                "José González von Schmeling<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Mail:</b> " +
-                "josego85@gmail.com<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Autor:</b> " +
-                "José Pino<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Mail:</b> " +
-                "josepino@gmail.com<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Año:</b> 2012" +
-                "<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Buscador v.1.0</b></body></html>";
+            "José González von Schmeling<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Mail:</b> " +
+            "josego85@gmail.com<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Autor:</b> " +
+            "José Pino<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Mail:</b> " +
+            "josepino@gmail.com<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Año:</b> 2012" +
+            "<br><b>&nbsp;&nbsp;&nbsp;&nbsp;Buscador v.1.0</b></body></html>";
         JOptionPane.showMessageDialog(this, codigoHTML,
-                "" + Constantes.INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO + 
-                Constantes.TITULO_PROGRAMA, JOptionPane.PLAIN_MESSAGE);
+            "" + Constantes.INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO + 
+            Constantes.TITULO_PROGRAMA, JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jButtonIndexarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIndexarActionPerformed
+        String mensaje = "Creando indices...";
+        JOptionPane.showMessageDialog(this, mensaje,
+            "" + Constantes.INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO + 
+            Constantes.TITULO_PROGRAMA, JOptionPane.PLAIN_MESSAGE);
+        
         // Se indexa los documentos.
         indexador = new Indexador();
         indexador.crearIndice(true);
+        
+        mensaje = "Se indexó " + indexador.getCantidadDeDocumentosIndexados() + " documentos";
+        JOptionPane.showMessageDialog(this, mensaje,
+            "" + Constantes.INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO + 
+            Constantes.TITULO_PROGRAMA, JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_jButtonIndexarActionPerformed
 
     private void jTextFieldBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBuscadorActionPerformed
@@ -206,9 +216,7 @@ public class Principal extends javax.swing.JFrame {
         JList list = (JList)evt.getSource();
         
         if (evt.getClickCount() == 2) {
-            int index = list.locationToIndex(evt.getPoint());
             mostrarContenido((String)list.getSelectedValue());
-            System.out.println("El objeto es: " + list.getSelectedValue());
         }
     }//GEN-LAST:event_jListaResultadoMousePressed
 
@@ -220,27 +228,23 @@ public class Principal extends javax.swing.JFrame {
         // Variables
         List<String> listaResultado = new ArrayList<String>();
         DefaultListModel modelo = new DefaultListModel();
-        
-        System.out.println("El texto vale: " + jTextFieldBuscador.getText());
-        
-       if(!jTextFieldBuscador.getText().equals("") ){
+           
+        if(!jTextFieldBuscador.getText().equals("")){
             listaResultado = seacher.searchIndex(jTextFieldBuscador.getText());
         
             Iterator iterador = listaResultado.iterator();
 
             while(iterador.hasNext()){
                 String value = (String)iterador.next();
-                System.out.println("Value : " + value);
                 modelo.addElement(value);
             }      
             jListaResultado.setModel(modelo);
-       }else{
-            String codigoHTML = "No introdujo nada en la caja del buscador.\n"
-                    + "Por favor. Escriba algo.";
-            JOptionPane.showMessageDialog(this, codigoHTML,
-                "" + Constantes.INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO + 
-                Constantes.TITULO_PROGRAMA, JOptionPane.ERROR_MESSAGE);    
-       }
+        }else{
+             modelo = (DefaultListModel) jListaResultado.getModel();
+            
+             // Eliminar todos los elementos de la lista jListaResultado.
+             modelo.removeAllElements();   
+        }
     } // Fin del metodo publico buscarContenido.
     
     

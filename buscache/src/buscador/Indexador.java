@@ -4,6 +4,7 @@
  */
 package buscador;
 
+import Auxiliar.Constantes;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
@@ -22,8 +23,7 @@ import org.apache.lucene.util.Version;
  */
 public class Indexador {
     // Objetos de clase.
-    public static final String directorioDatos = "medicalcd";          // Donde se encuentran los datos
-    public static final String directorioIndexar = "index";          // Donde se encuentra lo que se indexó.
+    private int cantidadDeDocumentosIndexados;
     
     // Metodo que crea los indices.
     // Se le pasa un valor booleano.
@@ -38,9 +38,9 @@ public class Indexador {
             SpanishAnalyzer analizador = new SpanishAnalyzer(Version.LUCENE_36);                
             
             // Almacenar el indexado en un directorio.
-            Directory directorioIndex = new SimpleFSDirectory(new File(directorioIndexar));
+            Directory directorioIndex = new SimpleFSDirectory(new File(Constantes.DIRECTORIO_INDEXAR));
             IndexWriter iwriter = new IndexWriter(directorioIndex, analizador, crearIndice, MaxFieldLength.UNLIMITED);
-            File directorio = new File(directorioDatos);
+            File directorio = new File(Constantes.DIRECTORIO_DATOS);
 
             File[] archivos = directorio.listFiles();
             
@@ -59,8 +59,9 @@ public class Indexador {
             }
             iwriter.optimize();
             
-            int cantidadDeDcoumentosIndexados = iwriter.numDocs();
-            System.out.println("Se indexó " + cantidadDeDcoumentosIndexados + " documentos.");
+            // Se setea la cantidad de Documentos Indexados.
+            setCantidadDeDocumentosIndexados(iwriter.numDocs());
+            
             iwriter.close(); 
             System.out.println("Finalizo el indexado..."); 
             System.out.println("\n"); 
@@ -68,4 +69,13 @@ public class Indexador {
              e.printStackTrace();
         }
     } // Fin del metodo publico crearIndice.
+
+    // Este metodo es privado porque no se debería de poder cambiar fuera de este Objeto.
+    private void setCantidadDeDocumentosIndexados(int cantidadDeDocumentosIndexados) {
+        this.cantidadDeDocumentosIndexados = cantidadDeDocumentosIndexados;
+    }
+
+    public int getCantidadDeDocumentosIndexados() {
+        return cantidadDeDocumentosIndexados;
+    }
 } // Fin de la clase Indexador.

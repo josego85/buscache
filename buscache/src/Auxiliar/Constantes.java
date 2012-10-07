@@ -28,4 +28,16 @@ public class Constantes {
      * @since 1.7
      */
     public static final String INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO = "     ";
+    
+    /**
+     * El nombre del directorio donde se encuentran los datos a Indexar.
+     * @since 1.7
+     */
+    public static final String DIRECTORIO_DATOS = "medicalcd";
+    
+    /**
+     * El nombre del directorio donde se van a colocar los archivos que se indexó.
+     * @since 1.7
+     */
+    public static final String DIRECTORIO_INDEXAR = "index";
 } // Fin de la clase Constantes.
