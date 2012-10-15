@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.SimpleFSDirectory;
 
 /*
  * To change this template, choose Tools | Templates
@@ -204,11 +206,27 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonIndexarActionPerformed
 
     private void jTextFieldBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBuscadorActionPerformed
-       buscarContenido();
+        if(verificarExistenciaIndex()){
+            buscarContenido();
+        }else{
+             String mensaje = "Se se puede buscar porque no se indexó todavía.\nPresione"
+                 + " el boton Indexar.";
+             JOptionPane.showMessageDialog(this, mensaje,
+                 "" + Constantes.INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO + 
+                 Constantes.TITULO_PROGRAMA, JOptionPane.PLAIN_MESSAGE);
+        } // Fin del else.
     }//GEN-LAST:event_jTextFieldBuscadorActionPerformed
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        buscarContenido();
+        if(verificarExistenciaIndex()){
+            buscarContenido();
+        }else{
+             String mensaje = "Se se puede buscar porque no se indexó todavía.\nPresione"
+                 + " el boton Indexar.";
+             JOptionPane.showMessageDialog(this, mensaje,
+                 "" + Constantes.INCREMENTO_CANTIDAD_DE_ESPACIO_TITULO + 
+                 Constantes.TITULO_PROGRAMA, JOptionPane.PLAIN_MESSAGE);
+        } // Fin del else.
         //mostrarContenido("");
     }//GEN-LAST:event_jButtonBuscarActionPerformed
 
@@ -248,7 +266,7 @@ public class Principal extends javax.swing.JFrame {
     } // Fin del metodo publico buscarContenido.
     
     
-    //
+    // Muestra el contenido (html).
     public void mostrarContenido(String rutaDocumento) {
         
         try{
@@ -261,6 +279,23 @@ public class Principal extends javax.swing.JFrame {
             e.printStackTrace();
         }
     } // Fin del metodo publico mostrarContenido.
+    
+    // Verifica si se creo el index.
+    public boolean verificarExistenciaIndex() {
+        
+        try{
+            File archivoIndex = new File(Constantes.DIRECTORIO_INDEXAR + "/segments.gen");
+ 
+            if(archivoIndex.exists()){
+                return true;
+            }else{
+               return false; 
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false; 
+    } // Fin del metodo publico verificarExistenciaIndex.
     
     /**
      * Donde se ejecuta la Ventana Principal de la aplicacion.
