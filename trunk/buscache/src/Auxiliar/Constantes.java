@@ -33,7 +33,7 @@ public class Constantes {
      * El nombre del directorio donde se encuentran los datos a Indexar.
      * @since 1.7
      */
-    public static final String DIRECTORIO_DATOS = "medicalcd";
+    public static final String DIRECTORIO_DATOS = "wikipedia_es";
     
     /**
      * El nombre del directorio donde se van a colocar los archivos que se indexó.
